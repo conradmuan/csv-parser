@@ -1,0 +1,78 @@
+[
+  {
+    "type": "sysomos",
+    "schema": [
+      {
+        "No": false,
+        "Source": {
+          "rename": "Outlet Type"
+        },
+        "Host": {
+          "rename": "Outlet"
+        },
+        "Link": true,
+        "Date(ET)": {
+          "rename": "Date"
+        },
+        "Time(ET)": false,
+        "time(eastern)": false,
+        "Category": false,
+        "AuthorId": true,
+        "AuthorName": true,
+        "AuthorUrl": false,
+        "Auth": false,
+        "Followers": true,
+        "Following": false,
+        "Age": false,
+        "Gender": false,
+        "Language": false,
+        "Country": false,
+        "Province": {
+          "rename": "Region"
+        },
+        "City": false,
+        "Location": false,
+        "Sentiment": false,
+        "Title": true,
+        "Snippet": true,
+        "Contents": false,
+        "View": false,
+        "Rating": false,
+        "Favourites": false,
+        "Duration": false,
+        "Bio": false,
+        "UniqueId": false
+      }
+    ]
+  },
+  {
+    "type": "infomart",
+    "schema": [
+      {
+        "Publication": {
+          "rename": "Outlet"
+        },
+        "Title": true,
+        "Lead": {
+          "rename": "Snippet"
+        },
+        "Byline": {
+          "rename": "AuthorName"
+        },
+        "Page": false,
+        "Length": false,
+        "Date": true,
+        "Region": true,
+        "Media": false,
+        "Tone": false,
+        "Ad Value": false,
+        "Circulation": {
+          "rename": "Followers"
+        },
+        "Link": true,
+        "Note": false,
+        "Outlet Type": true
+      }
+    ]
+  }
+]
