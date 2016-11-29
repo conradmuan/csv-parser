@@ -18,7 +18,9 @@ def get_config():
 CONFIG = get_config();
 
 # Open a folder and return its contents as a list if each item is a csv
-def get_csv_files(folder_path):
+def get_csv_files(folder_path=None):
+    if folder_path is None:
+        folder_path = 'raw_data'
     csv_count = 0;
     for item in os.listdir(folder_path):
         root, ext = os.path.splitext(item)
@@ -30,15 +32,37 @@ def get_csv_files(folder_path):
         sys.exit("Directory " + argv[1] + " does not have any csv files :(")
 
 # Erorr catching, exit when no args
-try:
-    get_csv_files(sys.argv[1]);
-except:
-    sys.exit("Please provide a directory to read");
+# try:
+#     get_csv_files(sys.argv[1]);
+# except:
+#     sys.exit("Please provide a directory to read");
 
 # Loop through each list and detect if the item is a sysomos or an infomart
 
-def parse_infomart(file):
-    print "parsing infomart for " + file
+def parse_infomart(path):
+    # Config for infomart
+    infomart_config = '';
+    # Header for an infomart file. If this doesn't exist in the csv file, we skip the file
+    infomart_header = [];
+
+    print "parsing " + path + " using infomart schema"
+    for conf in CONFIG:
+        if conf['type'] == 'infomart':
+            infomart_config = conf
+
+    print "parsing header row"
+    for col in conf['schema']:
+        if 'delete' in col and col['delete'] == False:
+            infomart_header.append(str(col['title']))
+
+    print infomart_header
+
+    # file = open(path, 'rt')
+    #
+    # reader = csv.reader(file)
+    # for row in reader:
+    #     if len(row) == 0:
+    #         continue
 
 def parse_sysomos(file):
     print "parsing sysomos for " + file
@@ -53,7 +77,7 @@ def determine_user_prompt(prompt, file):
     elif prompt == "quit" or prompt == "q":
         sys.exit("Quitting!")
     else:
-        # add some logging here
+        # Todo add some logging here
         print "I don't know what that means, skipping!"
 
 def iterate_over_csv_files():
@@ -66,5 +90,7 @@ def iterate_over_csv_files():
             print "Cannot determine type of csv file (sysomos/infomart). Please tell me."
             custom = raw_input("infomart/sysomos/skip/quit: ")
             determine_user_prompt(custom, item)
+# Run it
+# iterate_over_csv_files();
 
-iterate_over_csv_files();
+parse_infomart('raw_data/Database Infomart 2.csv')

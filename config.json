@@ -3,45 +3,128 @@
     "type": "sysomos",
     "schema": [
       {
-        "No": false,
-        "Source": {
-          "rename": "Outlet Type"
-        },
-        "Host": {
-          "rename": "Outlet"
-        },
-        "Link": true,
-        "Date(ET)": {
-          "rename": "Date"
-        },
-        "Time(ET)": false,
-        "time(eastern)": false,
-        "Category": false,
-        "AuthorId": true,
-        "AuthorName": true,
-        "AuthorUrl": false,
-        "Auth": false,
-        "Followers": true,
-        "Following": false,
-        "Age": false,
-        "Gender": false,
-        "Language": false,
-        "Country": false,
-        "Province": {
-          "rename": "Region"
-        },
-        "City": false,
-        "Location": false,
-        "Sentiment": false,
-        "Title": true,
-        "Snippet": true,
-        "Contents": false,
-        "View": false,
-        "Rating": false,
-        "Favourites": false,
-        "Duration": false,
-        "Bio": false,
-        "UniqueId": false
+        "title": "No",
+        "delete": true
+      },
+      {
+        "title": "Source",
+        "rename": "Outlet Type"
+      },
+      {
+        "title": "Host",
+        "rename": "Outlet"
+      },
+      {
+        "title": "Link",
+        "delete": false
+      },
+      {
+        "title": "Date(ET)",
+        "rename": "Date"
+      },
+      {
+        "title": "Time(ET)",
+        "delete": true
+      },
+      {
+        "title": "time(eastern)",
+        "delete": true
+      },
+      {
+        "title": "Category",
+        "delete": true
+      },
+      {
+        "title": "AuthorId",
+        "delete": false
+      },
+      {
+        "title": "AuthorName",
+        "delete": false
+      },
+      {
+        "title": "AuthorUrl",
+        "delete": true
+      },
+      {
+        "title": "Auth",
+        "delete": true
+      },
+      {
+        "title": "Followers",
+        "delete": false
+      },
+      {
+        "title": "Following",
+        "delete": true
+      },
+      {
+        "title": "Age",
+        "delete": true
+      },
+      {
+        "title": "Gender",
+        "delete": true
+      },
+      {
+        "title": "Language",
+        "delete": true
+      },
+      {
+        "title": "Country",
+        "delete": true
+      },
+      {
+        "title": "Province",
+        "rename": "Region"
+      },
+      {
+        "title": "City",
+        "delete": true
+      },
+      {
+        "title": "Location",
+        "delete": true
+      },
+      {
+        "title": "Sentiment",
+        "delete": true
+      },
+      {
+        "title": "Title",
+        "delete": false
+      },
+      {
+        "title": "Snippet",
+        "delete": false
+      },
+      {
+        "title": "Contents",
+        "delete": true
+      },
+      {
+        "title": "View",
+        "delete": true
+      },
+      {
+        "title": "Rating",
+        "delete": true
+      },
+      {
+        "title": "Favourites",
+        "delete": true
+      },
+      {
+        "title": "Duration",
+        "delete": true
+      },
+      {
+        "title": "Bio",
+        "delete": true
+      },
+      {
+        "title": "UniqueId",
+        "delete": true
       }
     ]
   },
@@ -49,29 +132,64 @@
     "type": "infomart",
     "schema": [
       {
-        "Publication": {
-          "rename": "Outlet"
-        },
-        "Title": true,
-        "Lead": {
-          "rename": "Snippet"
-        },
-        "Byline": {
-          "rename": "AuthorName"
-        },
-        "Page": false,
-        "Length": false,
-        "Date": true,
-        "Region": true,
-        "Media": false,
-        "Tone": false,
-        "Ad Value": false,
-        "Circulation": {
-          "rename": "Followers"
-        },
-        "Link": true,
-        "Note": false,
-        "Outlet Type": true
+        "title": "Publication",
+        "rename": "Outlet"
+      },
+      {
+        "title": "Title",
+        "delete": false
+      },
+      {
+        "title": "Lead",
+        "rename": "Snippet"
+      },
+      {
+        "title": "Byline",
+        "rename": "AuthorName"
+      },
+      {
+        "title": "Page",
+        "delete": true
+      },
+      {
+        "title": "Length",
+        "delete": true
+      },
+      {
+        "title": "Date",
+        "delete": false
+      },
+      {
+        "title": "Region",
+        "delete": false
+      },
+      {
+        "title": "Media",
+        "delete": true
+      },
+      {
+        "title": "Tone",
+        "delete": true
+      },
+      {
+        "title": "Ad Value",
+        "delete": true
+      },
+      {
+        "title": "Circulation",
+        "rename": "Followers"
+      },
+      {
+        "title": "Link",
+        "delete": false
+      },
+      {
+        "title": "Note",
+        "delete": true
+      },
+      {
+        "title": "Outlet Type",
+        "delete": false
       }
     ]
   }
