@@ -14,12 +14,8 @@ CSV_FILES = [];
 # Header row for the final file
 OUTPUT_HEADER = ['Outlet Type', 'Outlet', 'Link', 'Date', 'AuthorId', 'AuthorName', 'Followers', 'Region', 'Title', 'Snippet']
 
-# Open the config and store as a constant
-def get_config():
-    with open('config.json') as config_file:
-        return json.load(config_file)
-
-CONFIG = get_config();
+# Output File handler
+OUTPUT_FILE = '';
 
 # Open a folder and return its contents as a list if each item is a csv
 def get_csv_files(folder_path=None):
@@ -34,12 +30,6 @@ def get_csv_files(folder_path=None):
     # Exit if no csv files were found
     if csv_count == 0:
         sys.exit("Directory " + argv[1] + " does not have any csv files :(")
-
-# Erorr catching, exit when no args
-# try:
-#     get_csv_files(sys.argv[1]);
-# except:
-#     sys.exit("Please provide a directory to read");
 
 # Loop through each list and detect if the item is a sysomos or an infomart
 
@@ -85,6 +75,14 @@ def parse_infomart(filepath):
     # Temporary output file row
     temp_output_file_row = {}
 
+    # HARDCODED CONFIG do not use this
+    infomart_config = CONFIG[1]
+    print infomart_config
+    for item in infomart_config['schema']:
+        if 'rename' in item:
+            print 'found rename'
+            print item
+
     with open(temp_output_file_name+'.csv', 'w') as csv_file:
         temp_output_file = csv.DictWriter(csv_file, fieldnames=OUTPUT_HEADER)
         temp_output_file.writeheader()
@@ -92,38 +90,41 @@ def parse_infomart(filepath):
         with open(filepath, 'rt') as file:
             csv_file = csv.reader(file)
             for index, row in enumerate(csv_file):
-                
-                if len(row) == 0:
-                    continue
-                if row == expected_header_row:
-                    # This is the header row
-                    continue
-                # Start building out the rows
-                # I don't feel good about this approach :(
-                for idx, col_header in enumerate(OUTPUT_HEADER):
-                    if col_header == 'Outlet Type':
-                        temp_output_file_row[col_header] = 'NEWS'
-                    if col_header == 'Outlet':
-                        temp_output_file_row[col_header] = row[expected_header_row.index('Publication')]
-                    if col_header == 'Link':
-                        temp_output_file_row[col_header] = row[expected_header_row.index('Link')]
-                    if col_header == 'Date':
-                        temp_output_file_row[col_header] = row[expected_header_row.index('Date')]
-                    if col_header == 'AuthorId':
-                        temp_output_file_row[col_header] = row[expected_header_row.index('Byline')]
-                    if col_header == 'AuthorName':
-                        temp_output_file_row[col_header] = row[expected_header_row.index('Byline')]
-                    if col_header == 'Followers':
-                        temp_output_file_row[col_header] = row[expected_header_row.index('Circulation')]
-                    # todo, we need to abbreviate
-                    if col_header == 'Region':
-                        temp_output_file_row[col_header] = row[expected_header_row.index('Region')]
-                    if col_header == 'Title':
-                        temp_output_file_row[col_header] = row[expected_header_row.index('Title')]
-                    if col_header == 'Snippet':
-                        temp_output_file_row[col_header] = row[expected_header_row.index('Lead')]
+                # Todo: Validate that we have a header row somewhere in the first 10 rows
+                # Temp, remove this shit
+                if index < 3:
+                    if len(row) == 0:
+                        continue
+                    if row == expected_header_row:
+                        # This is the header row
+                        continue
+                    # Start building out the rows
+                    # I don't feel good about this approach :(
+                    for idx, col_header in enumerate(OUTPUT_HEADER):
 
-                temp_output_file.writerow(temp_output_file_row)
+                        if col_header == 'Outlet Type':
+                            temp_output_file_row[col_header] = 'NEWS'
+                        if col_header == 'Outlet':
+                            temp_output_file_row[col_header] = row[expected_header_row.index('Publication')]
+                        if col_header == 'Link':
+                            temp_output_file_row[col_header] = row[expected_header_row.index('Link')]
+                        if col_header == 'Date':
+                            temp_output_file_row[col_header] = row[expected_header_row.index('Date')]
+                        if col_header == 'AuthorId':
+                            temp_output_file_row[col_header] = row[expected_header_row.index('Byline')]
+                        if col_header == 'AuthorName':
+                            temp_output_file_row[col_header] = row[expected_header_row.index('Byline')]
+                        if col_header == 'Followers':
+                            temp_output_file_row[col_header] = row[expected_header_row.index('Circulation')]
+                        # todo, we need to abbreviate
+                        if col_header == 'Region':
+                            temp_output_file_row[col_header] = row[expected_header_row.index('Region')]
+                        if col_header == 'Title':
+                            temp_output_file_row[col_header] = row[expected_header_row.index('Title')]
+                        if col_header == 'Snippet':
+                            temp_output_file_row[col_header] = row[expected_header_row.index('Lead')]
+
+                    temp_output_file.writerow(temp_output_file_row)
     return
 
 def parse_sysomos(file):
@@ -154,4 +155,10 @@ def iterate_over_csv_files():
             determine_user_prompt(custom, item)
 # Run it
 # iterate_over_csv_files();
+
+# try:
+#     get_csv_files(sys.argv[1]);
+# except:
+#     get_csv_files();
+
 parse_infomart('raw_data/Database Infomart 2.csv')
