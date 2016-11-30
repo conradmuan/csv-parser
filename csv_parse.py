@@ -2,6 +2,7 @@ import sys
 import os
 import json
 import csv
+import hashlib
 from pprint import pprint
 
 # Const - config
@@ -9,6 +10,9 @@ CONFIG = [];
 
 # Const - list of files
 CSV_FILES = [];
+
+# Header row for the final file
+OUTPUT_HEADER = ['Outlet Type', 'Outlet', 'Link', 'Date', 'AuthorId', 'AuthorName', 'Followers', 'Region', 'Title', 'Snippet']
 
 # Open the config and store as a constant
 def get_config():
@@ -39,30 +43,88 @@ def get_csv_files(folder_path=None):
 
 # Loop through each list and detect if the item is a sysomos or an infomart
 
-def parse_infomart(path):
-    # Config for infomart
-    infomart_config = '';
-    # Header for an infomart file. If this doesn't exist in the csv file, we skip the file
-    infomart_header = [];
+def parse_file(filepath, type):
+    # The value of a CONFIG index for type
+    config = ''
+    # fieldnames we'll be saving
+    fields = []
+    # the index of the field we want to save
+    field_index_map = {}
+    # the file to parse
+    file = open(filepath, 'rt')
 
-    print "parsing " + path + " using infomart schema"
     for conf in CONFIG:
-        if conf['type'] == 'infomart':
-            infomart_config = conf
+        if conf['type'] == type:
+            config = conf
 
-    print "parsing header row"
-    for col in conf['schema']:
-        if 'delete' in col and col['delete'] == False:
-            infomart_header.append(str(col['title']))
+    for col in config['schema']:
+        fields.append(str(col['title']))
 
-    print infomart_header
+    print fields
 
-    # file = open(path, 'rt')
-    #
-    # reader = csv.reader(file)
-    # for row in reader:
-    #     if len(row) == 0:
-    #         continue
+    reader = csv.reader(file)
+    # Get the index of the fieldname in the file's header
+    # We will a ttempt to get the header in 10 tries
+    for index, row in enumerate(reader):
+        if index < 10:
+            for fieldname in fields:
+                if fieldname in row:
+                    field_index_map[fieldname] = row.index(fieldname)
+                else:
+                    # If the first fieldname wasn't in the row, safe to skip the row entirely
+                    break
+    print field_index_map
+
+# Custom logic for infomart
+def parse_infomart(filepath):
+    expected_header_row = ['Publication','Date','Region','Media','Tone','Ad Value','Circulation','Link','Byline','Page','Length','Title','Lead']
+    # Temporary output file name
+    temp_output_file_name = hashlib.md5(filepath).hexdigest();
+    # Temporary output file
+    temp_output_file = ''
+    # Temporary output file row
+    temp_output_file_row = {}
+
+    with open(temp_output_file_name+'.csv', 'w') as csv_file:
+        temp_output_file = csv.DictWriter(csv_file, fieldnames=OUTPUT_HEADER)
+        temp_output_file.writeheader()
+
+        with open(filepath, 'rt') as file:
+            csv_file = csv.reader(file)
+            for index, row in enumerate(csv_file):
+                
+                if len(row) == 0:
+                    continue
+                if row == expected_header_row:
+                    # This is the header row
+                    continue
+                # Start building out the rows
+                # I don't feel good about this approach :(
+                for idx, col_header in enumerate(OUTPUT_HEADER):
+                    if col_header == 'Outlet Type':
+                        temp_output_file_row[col_header] = 'NEWS'
+                    if col_header == 'Outlet':
+                        temp_output_file_row[col_header] = row[expected_header_row.index('Publication')]
+                    if col_header == 'Link':
+                        temp_output_file_row[col_header] = row[expected_header_row.index('Link')]
+                    if col_header == 'Date':
+                        temp_output_file_row[col_header] = row[expected_header_row.index('Date')]
+                    if col_header == 'AuthorId':
+                        temp_output_file_row[col_header] = row[expected_header_row.index('Byline')]
+                    if col_header == 'AuthorName':
+                        temp_output_file_row[col_header] = row[expected_header_row.index('Byline')]
+                    if col_header == 'Followers':
+                        temp_output_file_row[col_header] = row[expected_header_row.index('Circulation')]
+                    # todo, we need to abbreviate
+                    if col_header == 'Region':
+                        temp_output_file_row[col_header] = row[expected_header_row.index('Region')]
+                    if col_header == 'Title':
+                        temp_output_file_row[col_header] = row[expected_header_row.index('Title')]
+                    if col_header == 'Snippet':
+                        temp_output_file_row[col_header] = row[expected_header_row.index('Lead')]
+
+                temp_output_file.writerow(temp_output_file_row)
+    return
 
 def parse_sysomos(file):
     print "parsing sysomos for " + file
@@ -92,5 +154,4 @@ def iterate_over_csv_files():
             determine_user_prompt(custom, item)
 # Run it
 # iterate_over_csv_files();
-
 parse_infomart('raw_data/Database Infomart 2.csv')

@@ -136,60 +136,28 @@
         "rename": "Outlet"
       },
       {
-        "title": "Title",
-        "delete": false
+        "title": "Link"
       },
       {
-        "title": "Lead",
-        "rename": "Snippet"
+        "title": "Date"
       },
       {
         "title": "Byline",
         "rename": "AuthorName"
       },
       {
-        "title": "Page",
-        "delete": true
-      },
-      {
-        "title": "Length",
-        "delete": true
-      },
-      {
-        "title": "Date",
-        "delete": false
-      },
-      {
-        "title": "Region",
-        "delete": false
-      },
-      {
-        "title": "Media",
-        "delete": true
-      },
-      {
-        "title": "Tone",
-        "delete": true
-      },
-      {
-        "title": "Ad Value",
-        "delete": true
-      },
-      {
         "title": "Circulation",
         "rename": "Followers"
       },
       {
-        "title": "Link",
-        "delete": false
+        "title": "Region"
       },
       {
-        "title": "Note",
-        "delete": true
+        "title": "Title"
       },
       {
-        "title": "Outlet Type",
-        "delete": false
+        "title": "Lead",
+        "rename": "Snippet"
       }
     ]
   }
