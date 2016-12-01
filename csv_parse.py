@@ -67,7 +67,7 @@ def parse_file(filepath, type):
 # Custom logic for infomart
 def parse_infomart(filepath):
     # Header row of an infomart csv file
-    expected_header_row = ['Publication','Date','Region','Media','Tone','Ad Value','Circulation','Link','Byline','Page','Length','Title','Lead']
+    expected_header_row = ['Publication','Title','Lead','Byline','Page','Length','Date','Region','Media','Tone','Ad Value','Circulation','Link','Note']
 
     output_file_row = {}
 
