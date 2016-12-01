@@ -2,20 +2,19 @@ import sys
 import os
 import json
 import csv
-import hashlib
-from pprint import pprint
-
-# Const - config
-CONFIG = [];
 
 # Const - list of files
-CSV_FILES = [];
+CSV_FILES = []
 
 # Header row for the final file
 OUTPUT_HEADER = ['Outlet Type', 'Outlet', 'Link', 'Date', 'AuthorId', 'AuthorName', 'Followers', 'Region', 'Title', 'Snippet']
 
 # Output File handler
-OUTPUT_FILE = '';
+OUTPUT_FILE_HANDLER = open('final.csv', 'w')
+
+# Output CSV file
+OUTPUT_FILE = csv.DictWriter(OUTPUT_FILE_HANDLER, fieldnames=OUTPUT_HEADER)
+OUTPUT_FILE.writeheader()
 
 # Open a folder and return its contents as a list if each item is a csv
 def get_csv_files(folder_path=None):
@@ -67,68 +66,97 @@ def parse_file(filepath, type):
 
 # Custom logic for infomart
 def parse_infomart(filepath):
+    # Header row of an infomart csv file
     expected_header_row = ['Publication','Date','Region','Media','Tone','Ad Value','Circulation','Link','Byline','Page','Length','Title','Lead']
-    # Temporary output file name
-    temp_output_file_name = hashlib.md5(filepath).hexdigest();
-    # Temporary output file
-    temp_output_file = ''
-    # Temporary output file row
-    temp_output_file_row = {}
 
-    # HARDCODED CONFIG do not use this
-    infomart_config = CONFIG[1]
-    print infomart_config
-    for item in infomart_config['schema']:
-        if 'rename' in item:
-            print 'found rename'
-            print item
+    output_file_row = {}
 
-    with open(temp_output_file_name+'.csv', 'w') as csv_file:
-        temp_output_file = csv.DictWriter(csv_file, fieldnames=OUTPUT_HEADER)
-        temp_output_file.writeheader()
+    with open(filepath, 'rt') as file:
+        csv_file = csv.reader(file)
+        for index, row in enumerate(csv_file):
+            # Todo: Validate that we have a header row somewhere in the first 10 rows
+            # Temp, remove this shit
+            if index < 3:
+                if len(row) == 0:
+                    continue
+                if row == expected_header_row:
+                    # This is the header row
+                    continue
+                # Start building out the rows
+                # I don't feel good about this approach :(
+                for col_header in OUTPUT_HEADER:
+                    if col_header == 'Outlet Type':
+                        output_file_row[col_header] = 'NEWS'
+                    if col_header == 'Outlet':
+                        output_file_row[col_header] = row[expected_header_row.index('Publication')]
+                    if col_header == 'Link':
+                        output_file_row[col_header] = row[expected_header_row.index('Link')]
+                    if col_header == 'Date':
+                        output_file_row[col_header] = row[expected_header_row.index('Date')]
+                    if col_header == 'AuthorId':
+                        output_file_row[col_header] = row[expected_header_row.index('Byline')]
+                    if col_header == 'AuthorName':
+                        output_file_row[col_header] = row[expected_header_row.index('Byline')]
+                    if col_header == 'Followers':
+                        output_file_row[col_header] = row[expected_header_row.index('Circulation')]
+                    # todo, we need to abbreviate
+                    if col_header == 'Region':
+                        output_file_row[col_header] = row[expected_header_row.index('Region')]
+                    if col_header == 'Title':
+                        output_file_row[col_header] = row[expected_header_row.index('Title')]
+                    if col_header == 'Snippet':
+                        output_file_row[col_header] = row[expected_header_row.index('Lead')]
 
-        with open(filepath, 'rt') as file:
-            csv_file = csv.reader(file)
-            for index, row in enumerate(csv_file):
-                # Todo: Validate that we have a header row somewhere in the first 10 rows
-                # Temp, remove this shit
-                if index < 3:
-                    if len(row) == 0:
-                        continue
-                    if row == expected_header_row:
-                        # This is the header row
-                        continue
-                    # Start building out the rows
-                    # I don't feel good about this approach :(
-                    for idx, col_header in enumerate(OUTPUT_HEADER):
-
-                        if col_header == 'Outlet Type':
-                            temp_output_file_row[col_header] = 'NEWS'
-                        if col_header == 'Outlet':
-                            temp_output_file_row[col_header] = row[expected_header_row.index('Publication')]
-                        if col_header == 'Link':
-                            temp_output_file_row[col_header] = row[expected_header_row.index('Link')]
-                        if col_header == 'Date':
-                            temp_output_file_row[col_header] = row[expected_header_row.index('Date')]
-                        if col_header == 'AuthorId':
-                            temp_output_file_row[col_header] = row[expected_header_row.index('Byline')]
-                        if col_header == 'AuthorName':
-                            temp_output_file_row[col_header] = row[expected_header_row.index('Byline')]
-                        if col_header == 'Followers':
-                            temp_output_file_row[col_header] = row[expected_header_row.index('Circulation')]
-                        # todo, we need to abbreviate
-                        if col_header == 'Region':
-                            temp_output_file_row[col_header] = row[expected_header_row.index('Region')]
-                        if col_header == 'Title':
-                            temp_output_file_row[col_header] = row[expected_header_row.index('Title')]
-                        if col_header == 'Snippet':
-                            temp_output_file_row[col_header] = row[expected_header_row.index('Lead')]
-
-                    temp_output_file.writerow(temp_output_file_row)
+                OUTPUT_FILE.writerow(output_file_row)
+    # temp
+    OUTPUT_FILE_HANDLER.close()
     return
 
-def parse_sysomos(file):
-    print "parsing sysomos for " + file
+def parse_sysomos(filepath):
+    # Expected header row for a sysomos file
+    expected_header_row = ["No.","Source","Host","Link","Date(ET)","Time(ET)","time(Eastern Standard Time)","Category","AuthorId","AuthorName","AuthorUrl","Auth","Followers","Following","Age","Gender","Language","Country","Province","City","Location","Sentiment","Title","Snippet","Description","Tags","Contents","View","Comments","Rating","Favourites","Duration","Bio","UniqueId"]
+
+    output_file_row = {}
+
+    with open(filepath, 'rt') as file:
+        csv_file = csv.reader(file)
+        for index, row in enumerate(csv_file):
+            # Todo: validation
+            # temp remove this
+            if index < 10:
+                if len(row) == 0:
+                    continue
+                if row == expected_header_row:
+                    continue
+                # skip a bad row unique to this type of csv file
+                # row[0] == 
+                # build out the output_file_row
+                # for col_header in OUTPUT_HEADER:
+                #     if col_header == 'Outlet Type':
+                #         output_file_row[col_header] = row[expected_header_row.index('Source')]
+                #     if col_header == 'Outlet':
+                #         output_file_row[col_header] = row[expected_header_row.index('Host')]
+                #     if col_header == 'Link':
+                #         output_file_row[col_header] = row[expected_header_row.index('Link')]
+                #     if col_header == 'Date':
+                #         output_file_row[col_header] = row[expected_header_row.index('Date(ET)')]
+                #     if col_header == 'AuthorId':
+                #         output_file_row[col_header] = row[expected_header_row.index('AuthorId')]
+                #     if col_header == 'AuthorName':
+                #         output_file_row[col_header] = row[expected_header_row.index('AuthorName')]
+                #     if col_header == 'Followers':
+                #         output_file_row[col_header] = row[expected_header_row.index('Followers')]
+                #     # todo we need to make null if NA
+                #     if col_header == 'Region':
+                #         output_file_row[col_header] = row[expected_header_row.index('Province')]
+                #     if col_header == 'Title':
+                #         output_file_row[col_header] = row[expected_header_row.index('Title')]
+                #     if col_header == 'Snippet':
+                #         output_file_row[col_header] = row[expected_header_row.index('Snippet')]
+                OUTPUT_FILE.writerow(output_file_row)
+    # temp
+    OUTPUT_FILE_HANDLER.close()
+    return
 
 def determine_user_prompt(prompt, file):
     if prompt == "infomart" or prompt == "i":
@@ -161,4 +189,4 @@ def iterate_over_csv_files():
 # except:
 #     get_csv_files();
 
-parse_infomart('raw_data/Database Infomart 2.csv')
+parse_sysomos('raw_data/Rheumatology - sysomos.csv')
