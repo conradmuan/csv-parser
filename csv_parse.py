@@ -78,40 +78,39 @@ def parse_infomart(filepath):
         for index, row in enumerate(csv_file):
             # Todo: Validate that we have a header row somewhere in the first 10 rows
             # Temp, remove this shit
-            if index < 3:
-                if len(row) == 0:
-                    continue
-                if row == expected_header_row:
-                    # This is the header row
-                    continue
-                # Start building out the rows
-                # I don't feel good about this approach :(
-                for col_header in OUTPUT_HEADER:
-                    if col_header == 'Outlet Type':
-                        output_file_row[col_header] = 'NEWS'
-                    if col_header == 'Outlet':
-                        output_file_row[col_header] = row[expected_header_row.index('Publication')]
-                    if col_header == 'Link':
-                        output_file_row[col_header] = row[expected_header_row.index('Link')]
-                    if col_header == 'Date':
-                        output_file_row[col_header] = row[expected_header_row.index('Date')]
-                    if col_header == 'AuthorId':
-                        output_file_row[col_header] = row[expected_header_row.index('Byline')]
-                    if col_header == 'AuthorName':
-                        output_file_row[col_header] = row[expected_header_row.index('Byline')]
-                    if col_header == 'Followers':
-                        output_file_row[col_header] = row[expected_header_row.index('Circulation')]
-                    if col_header == 'Region':
-                        if row[expected_header_row.index('Region')].lower() in province_abbr_map:
-                            output_file_row[col_header] = province_abbr_map[row[expected_header_row.index('Region')].lower()]
-                        else:
-                            output_file_row[col_header] = row[expected_header_row.index('Region')]
-                    if col_header == 'Title':
-                        output_file_row[col_header] = row[expected_header_row.index('Title')]
-                    if col_header == 'Snippet':
-                        output_file_row[col_header] = row[expected_header_row.index('Lead')]
+            if len(row) == 0:
+                continue
+            if row == expected_header_row:
+                # This is the header row
+                continue
+            # Start building out the rows
+            # I don't feel good about this approach :(
+            for col_header in OUTPUT_HEADER:
+                if col_header == 'Outlet Type':
+                    output_file_row[col_header] = 'NEWS'
+                if col_header == 'Outlet':
+                    output_file_row[col_header] = row[expected_header_row.index('Publication')]
+                if col_header == 'Link':
+                    output_file_row[col_header] = row[expected_header_row.index('Link')]
+                if col_header == 'Date':
+                    output_file_row[col_header] = row[expected_header_row.index('Date')]
+                if col_header == 'AuthorId':
+                    output_file_row[col_header] = row[expected_header_row.index('Byline')]
+                if col_header == 'AuthorName':
+                    output_file_row[col_header] = row[expected_header_row.index('Byline')]
+                if col_header == 'Followers':
+                    output_file_row[col_header] = row[expected_header_row.index('Circulation')]
+                if col_header == 'Region':
+                    if row[expected_header_row.index('Region')].lower() in province_abbr_map:
+                        output_file_row[col_header] = province_abbr_map[row[expected_header_row.index('Region')].lower()]
+                    else:
+                        output_file_row[col_header] = row[expected_header_row.index('Region')]
+                if col_header == 'Title':
+                    output_file_row[col_header] = row[expected_header_row.index('Title')]
+                if col_header == 'Snippet':
+                    output_file_row[col_header] = row[expected_header_row.index('Lead')]
 
-                OUTPUT_FILE.writerow(output_file_row)
+            OUTPUT_FILE.writerow(output_file_row)
     return
 
 def parse_sysomos(filepath):
@@ -124,41 +123,39 @@ def parse_sysomos(filepath):
         csv_file = csv.reader(file)
         for index, row in enumerate(csv_file):
             # Todo: validation
-            # temp remove this
-            if index < 10:
-                if len(row) == 0:
-                    continue
-                if row == expected_header_row:
-                    continue
-                # skip a bad row unique to this type of csv file
-                if row[0] == 'Search Results':
-                    continue
-                # build out the output_file_row
-                for col_header in OUTPUT_HEADER:
-                    if col_header == 'Outlet Type':
-                        output_file_row[col_header] = row[expected_header_row.index('Source')]
-                    if col_header == 'Outlet':
-                        output_file_row[col_header] = row[expected_header_row.index('Host')]
-                    if col_header == 'Link':
-                        output_file_row[col_header] = row[expected_header_row.index('Link')]
-                    if col_header == 'Date':
-                        output_file_row[col_header] = row[expected_header_row.index('Date(ET)')]
-                    if col_header == 'AuthorId':
-                        output_file_row[col_header] = row[expected_header_row.index('AuthorId')]
-                    if col_header == 'AuthorName':
-                        output_file_row[col_header] = row[expected_header_row.index('AuthorName')]
-                    if col_header == 'Followers':
-                        output_file_row[col_header] = row[expected_header_row.index('Followers')]
-                    if col_header == 'Region':
-                        if row[expected_header_row.index('Province')] == '':
-                            output_file_row[col_header] = 'NA'
-                        else:
-                            output_file_row[col_header] = row[expected_header_row.index('Province')]
-                    if col_header == 'Title':
-                        output_file_row[col_header] = row[expected_header_row.index('Title')]
-                    if col_header == 'Snippet':
-                        output_file_row[col_header] = row[expected_header_row.index('Snippet')]
-                OUTPUT_FILE.writerow(output_file_row)
+            if len(row) == 0:
+                continue
+            if row == expected_header_row:
+                continue
+            # skip a bad row unique to this type of csv file
+            if row[0] == 'Search Results':
+                continue
+            # build out the output_file_row
+            for col_header in OUTPUT_HEADER:
+                if col_header == 'Outlet Type':
+                    output_file_row[col_header] = row[expected_header_row.index('Source')]
+                if col_header == 'Outlet':
+                    output_file_row[col_header] = row[expected_header_row.index('Host')]
+                if col_header == 'Link':
+                    output_file_row[col_header] = row[expected_header_row.index('Link')]
+                if col_header == 'Date':
+                    output_file_row[col_header] = row[expected_header_row.index('Date(ET)')]
+                if col_header == 'AuthorId':
+                    output_file_row[col_header] = row[expected_header_row.index('AuthorId')]
+                if col_header == 'AuthorName':
+                    output_file_row[col_header] = row[expected_header_row.index('AuthorName')]
+                if col_header == 'Followers':
+                    output_file_row[col_header] = row[expected_header_row.index('Followers')]
+                if col_header == 'Region':
+                    if row[expected_header_row.index('Province')] == '':
+                        output_file_row[col_header] = 'NA'
+                    else:
+                        output_file_row[col_header] = row[expected_header_row.index('Province')]
+                if col_header == 'Title':
+                    output_file_row[col_header] = row[expected_header_row.index('Title')]
+                if col_header == 'Snippet':
+                    output_file_row[col_header] = row[expected_header_row.index('Snippet')]
+            OUTPUT_FILE.writerow(output_file_row)
     return
 
 def determine_user_prompt(prompt, file):
@@ -184,6 +181,7 @@ def iterate_over_csv_files():
             parse_infomart(item)
         else:
             print "Cannot determine type of csv file (sysomos/infomart). Please tell me."
+            print item
             custom = raw_input("infomart/sysomos/skip/quit: ")
             determine_user_prompt(custom, item)
 
@@ -195,4 +193,3 @@ except:
 # Run it
 iterate_over_csv_files()
 OUTPUT_FILE_HANDLER.close()
-# parse_infomart('raw_data/Rheumatology - infomart.csv')
