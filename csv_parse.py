@@ -25,7 +25,7 @@ def get_csv_files(folder_path=None):
         root, ext = os.path.splitext(item)
         if ext == '.csv':
             csv_count += 1
-            CSV_FILES.append(item);
+            CSV_FILES.append(folder_path + '/' + item);
     # Exit if no csv files were found
     if csv_count == 0:
         sys.exit("Directory " + argv[1] + " does not have any csv files :(")
@@ -112,8 +112,6 @@ def parse_infomart(filepath):
                         output_file_row[col_header] = row[expected_header_row.index('Lead')]
 
                 OUTPUT_FILE.writerow(output_file_row)
-    # temp
-    OUTPUT_FILE_HANDLER.close()
     return
 
 def parse_sysomos(filepath):
@@ -133,7 +131,7 @@ def parse_sysomos(filepath):
                 if row == expected_header_row:
                     continue
                 # skip a bad row unique to this type of csv file
-                if row[0] == 'Search Results' and row[len(row)-1] == '':
+                if row[0] == 'Search Results':
                     continue
                 # build out the output_file_row
                 for col_header in OUTPUT_HEADER:
@@ -161,8 +159,6 @@ def parse_sysomos(filepath):
                     if col_header == 'Snippet':
                         output_file_row[col_header] = row[expected_header_row.index('Snippet')]
                 OUTPUT_FILE.writerow(output_file_row)
-    # temp
-    OUTPUT_FILE_HANDLER.close()
     return
 
 def determine_user_prompt(prompt, file):
@@ -197,6 +193,6 @@ except:
     get_csv_files()
 
 # Run it
-# iterate_over_csv_files()
-
-parse_infomart('raw_data/Rheumatology - infomart.csv')
+iterate_over_csv_files()
+OUTPUT_FILE_HANDLER.close()
+# parse_infomart('raw_data/Rheumatology - infomart.csv')
