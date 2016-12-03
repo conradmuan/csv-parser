@@ -12,7 +12,7 @@ This was a personal programming exercise.
 ## Gothas
 
 - skipped csv files will be recorded in a `skipped.txt` file
-- csv files need to be are expected to have the following headers:
+- csv files are expected to have the following headers:
   - infomart csv files: `['Publication','Title','Lead','Byline','Page','Length','Date','Region','Media','Tone','Ad Value','Circulation','Link','Note']`
   - sysomos csv files: `["No.","Source","Host","Link","Date(ET)","Time(ET)","time(Eastern Standard Time)","Category","AuthorId","AuthorName","AuthorUrl","Auth","Followers","Following","Age","Gender","Language","Country","Province","City","Location","Sentiment","Title","Snippet","Description","Tags","Contents","View","Comments","Rating","Favourites","Duration","Bio","UniqueId"]`
 - The script is **not** smart enough to skip csv files if the headers don't match
