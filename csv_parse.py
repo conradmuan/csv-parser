@@ -10,11 +10,16 @@ CSV_FILES = []
 OUTPUT_HEADER = ['Outlet Type', 'Outlet', 'Link', 'Date', 'AuthorId', 'AuthorName', 'Followers', 'Region', 'Title', 'Snippet']
 
 # Output File handler
-OUTPUT_FILE_HANDLER = open('final.csv', 'w')
+OUTPUT_FILE_HANDLER = ''
 
-# Output CSV file
-OUTPUT_FILE = csv.DictWriter(OUTPUT_FILE_HANDLER, fieldnames=OUTPUT_HEADER)
-OUTPUT_FILE.writeheader()
+# w or a depending on if exists
+if (os.path.exists('./final.csv')):
+    OUTPUT_FILE_HANDLER = open('final.csv', 'a')
+    OUTPUT_FILE = csv.DictWriter(OUTPUT_FILE_HANDLER, fieldnames=OUTPUT_HEADER)
+else:
+    OUTPUT_FILE_HANDLER = open('final.csv', 'w')
+    OUTPUT_FILE = csv.DictWriter(OUTPUT_FILE_HANDLER, fieldnames=OUTPUT_HEADER)
+    OUTPUT_FILE.writeheader()
 
 # Open a folder and return its contents as a list if each item is a csv
 def get_csv_files(folder_path=None):
